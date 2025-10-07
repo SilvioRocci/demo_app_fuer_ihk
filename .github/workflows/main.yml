@@ -32,8 +32,8 @@ jobs:
       - name: Prepare Deployment Package
         run: |
           rm -rf dist-to-deploy
-          mkdir -p dist-to-deploy/public/browser
-          cp -r urlaub_ihk/dist/browser/* dist-to-deploy/public/browser/
+          mkdir -p dist-to-deploy/dist/browser
+          cp -r urlaub_ihk/dist/browser/* dist-to-deploy/urlaub_ihk/dist/browser
           cp urlaub_ihk/server.js urlaub_ihk/package*.json dist-to-deploy/
           cd dist-to-deploy && zip -r ../app.zip .
 

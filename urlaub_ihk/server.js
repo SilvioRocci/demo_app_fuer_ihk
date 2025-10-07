@@ -14,7 +14,7 @@ const DB_NAME = process.env.DB_NAME;
 app.use(express.json());
 
 // Statische Angular Dateien
-app.use(express.static(path.join(__dirname, 'public/browser')));
+app.use(express.static(path.join(__dirname, 'dist/browser')));
 
 // DB Verbindung
 async function getConnection() {
@@ -55,7 +55,7 @@ app.delete('/api/urlaubsantraege/:id', async (req, res) => {
 
 // Fallback → Angular index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/browser/index.html'));
+  res.sendFile(path.join(__dirname, 'dist/browser/index.html'));
 });
 
 app.listen(PORT, () => {
