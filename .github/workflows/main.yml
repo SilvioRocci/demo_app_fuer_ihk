@@ -33,7 +33,7 @@ jobs:
         run: |
           rm -rf dist-to-deploy
           mkdir -p dist-to-deploy/dist/browser
-          cp -r urlaub_ihk/dist/browser/* dist-to-deploy/urlaub_ihk/dist/browser
+          cp -r dist/browser/* dist-to-deploy/dist/browser
           cp urlaub_ihk/server.js urlaub_ihk/package*.json dist-to-deploy/
           cd dist-to-deploy && zip -r ../app.zip .
 
