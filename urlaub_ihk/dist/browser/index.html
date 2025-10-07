@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="de" data-beasties-container>
+<head>
+  <meta charset="UTF-8">
+  <title>Urlaubsantrag</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .form-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
+      color: green;
+      text-align: center;
+    }
+    #entries {
+      margin-top: 30px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      max-width: 800px;
+      width: 100%;
+      display: none; /* Anfangs versteckt */
+    }
+    #entries table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #entries th, #entries td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    #entries th {
+      background: #f2f2f2;
+    }
+    .delete-btn {
+      background: #dc3545;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+    .delete-btn:hover {
+      background: #a71d2a;
+    }
+  </style>
+<link rel="stylesheet" href="styles-5INURTSO.css"></head>
+<body>
+  <h1>Urlaubsantrag stellen</h1>
+
+  <div class="form-container">
+    <form id="urlaub-form">
+      <label>
+        Name:
+        <input type="text" id="name" required>
+      </label>
+      <label>
+        Startdatum:
+        <input type="date" id="start" required>
+      </label>
+      <label>
+        Enddatum:
+        <input type="date" id="end" required>
+      </label>
+      <label>
+        Grund:
+        <textarea id="grund"></textarea>
+      </label>
+
+      <div class="button-row">
+        <button type="submit">Absenden</button>
+        <button type="button" id="load-entries">Einträge anzeigen</button>
+      </div>
+    </form>
+
+    <p id="status"></p>
+  </div>
+
+  <div id="entries"></div>
+
+  <script>
+    const form = document.getElementById("urlaub-form");
+    const statusEl = document.getElementById("status");
+    const entriesEl = document.getElementById("entries");
+    const loadBtn = document.getElementById("load-entries");
+
+    let entriesVisible = false; // Zustand merken
+
+    // Antrag absenden
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {
+        name: document.getElementById("name").value,
+        start: document.getElementById("start").value,
+        end: document.getElementById("end").value,
+        grund: document.getElementById("grund").value,
+      };
+
+      try {
+        const res = await fetch("/api/urlaubsantraege", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const result = await res.json();
+        if (res.ok) {
+          statusEl.textContent = "✅ Antrag erfolgreich gespeichert!";
+          form.reset();
+        } else {
+          statusEl.textContent = "❌ Fehler: " + result.error;
+        }
+      } catch (err) {
+        statusEl.textContent = "❌ Serverfehler: " + err.message;
+      }
+    });
+
+    // Einträge laden
+    async function loadEntries() {
+      try {
+        const res = await fetch("/api/urlaubsantraege");
+        const data = await res.json();
+
+        if (res.ok) {
+          if (data.length === 0) {
+            entriesEl.innerHTML = "<p>Keine Einträge vorhanden.</p>";
+          } else {
+            let html = "<h2>Gespeicherte Anträge</h2>";
+            html += "<table><tr><th>ID</th><th>Name</th><th>Start</th><th>Ende</th><th>Grund</th><th>Aktion</th></tr>";
+            data.forEach(row => {
+              html += `<tr>
+                <td>${row.id}</td>
+                <td>${row.name}</td>
+                <td>${row.start}</td>
+                <td>${row.ende}</td>
+                <td>${row.grund || ""}</td>
+                <td><button class="delete-btn" onclick="deleteEntry(${row.id})">Löschen</button></td>
+              </tr>`;
+            });
+            html += "</table>";
+            entriesEl.innerHTML = html;
+          }
+        } else {
+          entriesEl.innerHTML = "<p>❌ Fehler beim Laden</p>";
+        }
+      } catch (err) {
+        entriesEl.innerHTML = "<p>❌ Serverfehler: " + err.message + "</p>";
+      }
+    }
+
+    // Eintrag löschen
+    async function deleteEntry(id) {
+      if (!confirm("Willst du den Antrag wirklich löschen?")) return;
+      try {
+        const res = await fetch("/api/urlaubsantraege/" + id, {
+          method: "DELETE",
+        });
+        if (res.ok) {
+          await loadEntries();
+        } else {
+          alert("❌ Fehler beim Löschen");
+        }
+      } catch (err) {
+        alert("❌ Serverfehler: " + err.message);
+      }
+    }
+
+    // Button-Klick: Toggle zwischen Anzeigen und Verbergen
+    loadBtn.addEventListener("click", async () => {
+      if (entriesVisible) {
+        entriesEl.style.display = "none";
+        loadBtn.textContent = "Einträge anzeigen";
+        entriesVisible = false;
+      } else {
+        await loadEntries();
+        entriesEl.style.display = "block";
+        loadBtn.textContent = "Einträge verbergen";
+        entriesVisible = true;
+      }
+    });
+  </script>
+<script src="polyfills-5CFQRCPP.js" type="module"></script><script src="main-F4ZZ4YU5.js" type="module"></script></body>
+</html>
