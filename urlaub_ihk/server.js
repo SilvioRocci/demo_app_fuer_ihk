@@ -5,7 +5,6 @@ const mysql = require('mysql2/promise');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// DB Credentials aus Elastic Beanstalk Environment
 const DB_HOST = process.env.DB_HOST;
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
@@ -13,10 +12,8 @@ const DB_NAME = process.env.DB_NAME;
 
 app.use(express.json());
 
-// Statische Angular Dateien
 app.use(express.static(path.join(__dirname, 'dist/browser')));
 
-// DB Verbindung
 async function getConnection() {
   return mysql.createConnection({
     host: DB_HOST,
@@ -26,7 +23,6 @@ async function getConnection() {
   });
 }
 
-// API Endpoints
 app.get('/api/urlaubsantraege', async (req, res) => {
   const conn = await getConnection();
   const [rows] = await conn.execute("SELECT * FROM urlaubsantraege");
@@ -53,7 +49,6 @@ app.delete('/api/urlaubsantraege/:id', async (req, res) => {
   res.send("Urlaub gelöscht");
 });
 
-// Fallback → Angular index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/browser/index.html'));
 });
