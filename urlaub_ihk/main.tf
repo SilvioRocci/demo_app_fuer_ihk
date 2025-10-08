@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "rocci-ihk-terraformstate"
-    key = "/terraform.tfstate"
+    key = "terraform.tfstate"
     region = "eu-central-1"    
   }  
   required_providers {
