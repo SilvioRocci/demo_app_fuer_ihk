@@ -11,7 +11,6 @@ const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_NAME = process.env.DB_NAME;
 
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname, 'dist/browser')));
 
 async function getConnection() {
@@ -23,36 +22,57 @@ async function getConnection() {
   });
 }
 
+// GET alle Urlaubsanträge
 app.get('/api/urlaubsantraege', async (req, res) => {
-  const conn = await getConnection();
-  const [rows] = await conn.execute("SELECT * FROM urlaubsantraege");
-  await conn.end();
-  res.json(rows);
+  try {
+    const conn = await getConnection();
+    const [rows] = await conn.execute("SELECT * FROM urlaubsantraege");
+    await conn.end();
+    res.json(rows);
+  } catch (err) {
+    console.error("❌ Fehler beim SELECT:", err);
+    res.status(500).json({ error: "DB-Select fehlgeschlagen", details: err.message });
+  }
 });
 
+// POST neuer Urlaubsantrag
 app.post('/api/urlaubsantraege', async (req, res) => {
-  const { name, start, end, grund } = req.body;
-  const conn = await getConnection();
-  await conn.execute(
-    "INSERT INTO urlaubsantraege (name, start, end, grund) VALUES (?, ?, ?, ?)",
-    [name, start, end, grund]
-  );
-  await conn.end();
-  res.status(201).send("Urlaub gespeichert");
+  try {
+    const { name, start, end, grund } = req.body;
+    const conn = await getConnection();
+    const [result] = await conn.execute(
+      "INSERT INTO urlaubsantraege (name, start, end, grund) VALUES (?, ?, ?, ?)",
+      [name, start, end, grund]
+    );
+    await conn.end();
+    console.log("✅ Insert erfolgreich:", result);
+    res.status(201).json({ message: "Urlaub gespeichert", id: result.insertId });
+  } catch (err) {
+    console.error("❌ Fehler beim INSERT:", err);
+    res.status(500).json({ error: "DB-Insert fehlgeschlagen", details: err.message });
+  }
 });
 
+// DELETE Antrag
 app.delete('/api/urlaubsantraege/:id', async (req, res) => {
-  const { id } = req.params;
-  const conn = await getConnection();
-  await conn.execute("DELETE FROM urlaubsantraege WHERE id = ?", [id]);
-  await conn.end();
-  res.send("Urlaub gelöscht");
+  try {
+    const { id } = req.params;
+    const conn = await getConnection();
+    const [result] = await conn.execute("DELETE FROM urlaubsantraege WHERE id = ?", [id]);
+    await conn.end();
+    console.log("🗑️ Delete:", result);
+    res.json({ message: "Urlaub gelöscht" });
+  } catch (err) {
+    console.error("❌ Fehler beim DELETE:", err);
+    res.status(500).json({ error: "DB-Delete fehlgeschlagen", details: err.message });
+  }
 });
 
+// Fallback für Angular/React/Vue SPA
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/browser/index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`Server läuft auf Port ${PORT}`);
-});
+  console.log(`🚀 Server läuft auf Port ${PORT}`);
+  console.log(`DB_HOST=${DB_HOST}, DB_USER=${DB_USER}, DB_NAME=${DB_NAME}`)});
