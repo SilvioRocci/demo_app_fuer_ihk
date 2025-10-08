@@ -41,7 +41,7 @@ app.post('/api/urlaubsantraege', async (req, res) => {
     const { name, start, end, grund } = req.body;
     const conn = await getConnection();
     const [result] = await conn.execute(
-      "INSERT INTO urlaubsantraege (name, start, end, grund) VALUES (?, ?, ?, ?)",
+      "INSERT INTO urlaubsantraege (name, start, ende, grund) VALUES (?, ?, ?, ?)", // 👉 ende statt end
       [name, start, end, grund]
     );
     await conn.end();
@@ -75,4 +75,5 @@ app.get('*', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Server läuft auf Port ${PORT}`);
-  console.log(`DB_HOST=${DB_HOST}, DB_USER=${DB_USER}, DB_NAME=${DB_NAME}`)});
+  console.log(`DB_HOST=${DB_HOST}, DB_USER=${DB_USER}, DB_NAME=${DB_NAME}`);
+});
