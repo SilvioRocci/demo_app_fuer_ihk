@@ -22,6 +22,11 @@ async function getConnection() {
   });
 }
 
+// Hilfsfunktion: undefined → null umwandeln
+function sanitize(value) {
+  return value === undefined ? null : value;
+}
+
 // GET alle Urlaubsanträge
 app.get('/api/urlaubsantraege', async (req, res) => {
   try {
@@ -39,12 +44,15 @@ app.get('/api/urlaubsantraege', async (req, res) => {
 app.post('/api/urlaubsantraege', async (req, res) => {
   try {
     const { name, start, ende, grund } = req.body;
+    console.log("📥 Request Body:", req.body); // Debugging-Ausgabe
+
     const conn = await getConnection();
     const [result] = await conn.execute(
-      "INSERT INTO urlaubsantraege (name, start, ende, grund) VALUES (?, ?, ?, ?)", 
-      [name, start, ende, grund]
+      "INSERT INTO urlaubsantraege (name, start, ende, grund) VALUES (?, ?, ?, ?)",
+      [sanitize(name), sanitize(start), sanitize(ende), sanitize(grund)]
     );
     await conn.end();
+
     console.log("✅ Insert erfolgreich:", result);
     res.status(201).json({ message: "Urlaub gespeichert", id: result.insertId });
   } catch (err) {
@@ -60,6 +68,7 @@ app.delete('/api/urlaubsantraege/:id', async (req, res) => {
     const conn = await getConnection();
     const [result] = await conn.execute("DELETE FROM urlaubsantraege WHERE id = ?", [id]);
     await conn.end();
+
     console.log("🗑️ Delete:", result);
     res.json({ message: "Urlaub gelöscht" });
   } catch (err) {
