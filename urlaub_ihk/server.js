@@ -27,19 +27,10 @@ function sanitize(value) {
   return value === undefined ? null : value;
 }
 
-// Hilfsfunktion: Datum ins Format YYYY-MM-DD umwandeln
+// Hilfsfunktion: Datum in YYYY-MM-DD normalisieren
 function normalizeDate(value) {
   if (!value) return null;
-  // Direktes YYYY-MM-DD → passt schon
-  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    return value;
-  }
-  // ISO-String oder Date-Objekt
-  const date = new Date(value);
-  if (!isNaN(date.getTime())) {
-    return date.toISOString().slice(0, 10); // YYYY-MM-DD
-  }
-  return null;
+  return new Date(value).toISOString().split('T')[0];
 }
 
 // GET alle Urlaubsanträge
@@ -48,7 +39,15 @@ app.get('/api/urlaubsantraege', async (req, res) => {
     const conn = await getConnection();
     const [rows] = await conn.execute("SELECT * FROM urlaubsantraege");
     await conn.end();
-    res.json(rows);
+
+    // Datumsfelder normalisieren
+    const normalized = rows.map(r => ({
+      ...r,
+      start: normalizeDate(r.start),
+      ende: normalizeDate(r.ende)
+    }));
+
+    res.json(normalized);
   } catch (err) {
     console.error("❌ Fehler beim SELECT:", err);
     res.status(500).json({ error: "DB-Select fehlgeschlagen", details: err.message });
@@ -59,7 +58,7 @@ app.get('/api/urlaubsantraege', async (req, res) => {
 app.post('/api/urlaubsantraege', async (req, res) => {
   try {
     const { name, start, ende, grund } = req.body;
-    console.log("📥 Request Body:", req.body); // Debugging-Ausgabe
+    console.log("📥 Request Body:", req.body);
 
     const conn = await getConnection();
     const [result] = await conn.execute(
@@ -92,7 +91,7 @@ app.delete('/api/urlaubsantraege/:id', async (req, res) => {
   }
 });
 
-// Fallback für Angular/React/Vue SPA
+// Fallback für Angular SPA
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/browser/index.html'));
 });
