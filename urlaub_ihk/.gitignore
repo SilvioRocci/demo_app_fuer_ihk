@@ -41,3 +41,16 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+#Keine großen Binärdateien
+*.exe
+*.dll
+*.zip
+*.tar
+*.gz
+*.7z
+*.iso
+*.bin
+*.msi
+*.deb
+*.rpm
