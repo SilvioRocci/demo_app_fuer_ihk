@@ -121,4 +121,4 @@ jobs:
           mysql -h "$DB_HOST" \
                 -u "$DB_USER" \
                 -p"$DB_PASSWORD" \
-                "$DB_NAME" < ./urlaub_ihk/schema.sql
+                "$DB_NAME" < schema.sql
