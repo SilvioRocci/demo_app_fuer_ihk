@@ -5,3 +5,9 @@ if command -v dnf >/dev/null 2>&1; then
 else
   sudo yum install -y mariadb
 fi
+
+echo "Running DB migration..."
+mysql -h "$DB_HOST" \
+      -u "$DB_USER" \
+      -p"$DB_PASSWORD" \
+      "$DB_NAME" < /var/app/current/schema.sql
