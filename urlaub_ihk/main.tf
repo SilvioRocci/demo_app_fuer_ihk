@@ -137,7 +137,7 @@ resource "aws_rds_cluster" "aurora-db" {
     skip_final_snapshot = true
     
 }   
-resource "aws_rds_cluster_instance" "auror-db-instance" {
+resource "aws_rds_cluster_instance" "aurora-db-instance" {
     identifier = "rocci-ihk-instance-1"
     cluster_identifier = aws_rds_cluster.aurora-db.cluster_identifier
     engine = aws_rds_cluster.aurora-db.engine
