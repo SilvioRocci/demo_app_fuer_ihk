@@ -32,7 +32,7 @@ async function ladeUrlaube() {
   urlaubListeEl.innerHTML = "";
   urlaube.forEach((urlaub: any) => {
     const li = document.createElement("li");
-    li.textContent = `${urlaub.name} | ${urlaub.start} - ${urlaub.end} | ${urlaub.grund}`;
+    li.textContent = `${urlaub.name} | ${urlaub.start} - ${urlaub.ende} | ${urlaub.grund}`;
 
     // Löschen-Button
     const deleteBtn = document.createElement("button");
