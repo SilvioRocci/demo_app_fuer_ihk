@@ -38,11 +38,11 @@ app.get('/api/urlaubsantraege', async (req, res) => {
 // POST neuer Urlaubsantrag
 app.post('/api/urlaubsantraege', async (req, res) => {
   try {
-    const { name, start, end, grund } = req.body;
+    const { name, start, ende, grund } = req.body;
     const conn = await getConnection();
     const [result] = await conn.execute(
-      "INSERT INTO urlaubsantraege (name, start, ende, grund) VALUES (?, ?, ?, ?)", // 👉 ende statt end
-      [name, start, end, grund]
+      "INSERT INTO urlaubsantraege (name, start, ende, grund) VALUES (?, ?, ?, ?)", 
+      [name, start, ende, grund]
     );
     await conn.end();
     console.log("✅ Insert erfolgreich:", result);
