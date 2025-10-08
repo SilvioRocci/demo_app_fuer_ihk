@@ -127,6 +127,7 @@ resource "aws_rds_cluster" "aurora-db" {
     cluster_identifier = "rocci-ihk-cluster"
     engine = "aurora-mysql"
     engine_version = "8.0.mysql_aurora.3.08.2"
+    engine_mode = "serverless"
     database_name = "urlaub_app"
     master_username = "admin"
     master_password = "12345678"
@@ -147,7 +148,7 @@ resource "aws_rds_cluster_instance" "aurora-db-instance" {
     cluster_identifier = aws_rds_cluster.aurora-db.cluster_identifier
     engine = aws_rds_cluster.aurora-db.engine
     engine_version = aws_rds_cluster.aurora-db.engine_version
-    instance_class = "db.serverless"
+    instance_class = "db.t2.medium"
     publicly_accessible = false  
 }
 
