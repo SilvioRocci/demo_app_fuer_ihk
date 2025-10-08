@@ -147,7 +147,7 @@ resource "aws_rds_cluster_instance" "aurora-db-instance" {
     cluster_identifier = aws_rds_cluster.aurora-db.cluster_identifier
     engine = aws_rds_cluster.aurora-db.engine
     engine_version = aws_rds_cluster.aurora-db.engine_version
-    instance_class = "db.t2.micro"
+    instance_class = "db.t3.medium"
     publicly_accessible = false  
 }
 
