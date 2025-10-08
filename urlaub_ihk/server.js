@@ -34,7 +34,7 @@ app.post('/api/urlaubsantraege', async (req, res) => {
   const { name, start, end, grund } = req.body;
   const conn = await getConnection();
   await conn.execute(
-    "INSERT INTO urlaubsantraege (name, start, ende, grund) VALUES (?, ?, ?, ?)",
+    "INSERT INTO urlaubsantraege (name, start, end, grund) VALUES (?, ?, ?, ?)",
     [name, start, end, grund]
   );
   await conn.end();
