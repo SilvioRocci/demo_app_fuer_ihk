@@ -1,5 +1,4 @@
 name: Build & Deploy
-
 on:
   push:
     branches:
@@ -8,6 +7,7 @@ on:
       - 'urlaub_ihk/*.tf'           # nur Terraform-Dateien triggern den Terraform-Job
       - 'urlaub_ihk/schema.sql'     # optional: Schema auch überwachen
       - '.github/workflows/main.yml' # Workflow-Änderungen triggern ebenfalls
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -52,9 +52,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: terraform
     outputs:
-        db_host: ${{ needs.terraform.outputs.db_host }}
-        db_user: ${{ needs.terraform.outputs.db_user }}
-        db_name: ${{ needs.terraform.outputs.db_name }} 
+      db_host: ${{ needs.terraform.outputs.db_host }}
+      db_user: ${{ needs.terraform.outputs.db_user }}
+      db_name: ${{ needs.terraform.outputs.db_name }} 
 
     steps:
       - name: Checkout Repository
@@ -81,7 +81,7 @@ jobs:
           rm -rf dist-to-deploy
           mkdir -p dist-to-deploy/dist/browser
           cp -r dist/browser/* dist-to-deploy/dist/browser
-          cp urlaub_ihk/server.js urlaub_ihk/package*.json dist-to-deploy/
+          cp urlaub_ihk/server.js urlaub_ihk/package*.json urlaub_ihk/schema.sql dist-to-deploy/
           cd dist-to-deploy && zip -r ../app.zip .
 
       - name: Upload Artifact
@@ -123,12 +123,3 @@ jobs:
           region: eu-central-1
           version_label: ${{ github.sha }}
           deployment_package: "app.zip"
-
-      - name: Update Database Schema
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mysql-client
-          mysql -h "${{ needs.build.outputs.db_host }}" \
-                -u "${{ needs.build.outputs.db_user }}" \
-                -p"${{ secrets.DB_PASSWORD }}" \
-                "${{ needs.build.outputs.db_name }}" < urlaub_ihk/schema.sql
