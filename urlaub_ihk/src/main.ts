@@ -12,7 +12,6 @@ form.addEventListener('submit', async (event) => {
   const start = (document.getElementById('start') as HTMLInputElement).value;
   const end = (document.getElementById('ende') as HTMLInputElement).value;
   const grund = (document.getElementById('grund') as HTMLTextAreaElement).value;
-
   const neuerUrlaub = { name, start, end, grund };
 
   await fetch(apiUrl, {
