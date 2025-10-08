@@ -226,12 +226,6 @@ resource "aws_elastic_beanstalk_environment" "env" {
     name      = "DB_PASSWORD"
     value     = aws_rds_cluster.aurora-db.master_password
     }
-
-    setting {
-    namespace = "aws:autoscaling:launchconfiguration"
-    name      = "EC2KeyName"
-    value     = aws_key_pair.eb_key.key_name
-  }
 }
 output "db_host" {
   value = aws_rds_cluster.aurora-db.endpoint
