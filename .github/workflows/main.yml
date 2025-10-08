@@ -8,7 +8,6 @@ on:
       - 'urlaub_ihk/schema.sql'     # optional: Schema auch überwachen
       - '.github/workflows/main.yml' # Workflow-Änderungen triggern ebenfalls
 
-      
 jobs:
   terraform:
     runs-on: ubuntu-latest
