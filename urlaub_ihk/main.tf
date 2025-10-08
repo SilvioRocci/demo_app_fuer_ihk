@@ -139,8 +139,8 @@ resource "aws_rds_cluster" "aurora-db" {
       min_capacity = 2
       max_capacity = 4
     }
-    skip_final_snapshot = true
-    
+    skip_final_snapshot = true  
+    enable_http_endpoint = true
 }   
 resource "aws_rds_cluster_instance" "aurora-db-instance" {
     identifier = "rocci-ihk-instance-1"
