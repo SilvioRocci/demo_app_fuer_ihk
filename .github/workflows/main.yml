@@ -87,6 +87,7 @@ jobs:
           mkdir -p dist-to-deploy/dist/browser
           cp -r dist/browser/* dist-to-deploy/dist/browser
           cp urlaub_ihk/server.js urlaub_ihk/package*.json urlaub_ihk/schema.sql dist-to-deploy/
+          cp -r urlaub_ihk/.platform dist-to-deploy/   # <── Plattform-Hooks hinzufügen
           cd dist-to-deploy && zip -r ../app.zip .
 
       - name: Upload Artifact
