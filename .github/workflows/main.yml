@@ -76,6 +76,16 @@ jobs:
         run: npm run build -- --configuration production --output-path=dist/browser
         working-directory: ./urlaub_ihk
 
+      - name: Install MySQL Client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
+
+      - name: Run DB Migration
+        run: |
+          mysql -h "${{ needs.terraform.outputs.db_host }}" 
+                -u "${{ needs.terraform.outputs.db_user }}" 
+                -p"${{ secrets.DB_PASSWORD }}" 
+                "${{ needs.terraform.outputs.db_name }}" < urlaub_ihk/schema.sql
+
       - name: Prepare Deployment Package
         run: |
           rm -rf dist-to-deploy
