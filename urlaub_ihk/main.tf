@@ -110,6 +110,15 @@ resource "aws_security_group" "sg-eb-rocci" {
   
 }
 
+ variable "github_actions_ips" {
+    default = [
+    "20.201.28.0/23",
+    "20.205.243.128/25",
+    "20.207.73.0/25",
+    "20.233.54.0/23",
+    # … weitere aus der GitHub‑Liste
+  ]
+}
 # Security Group für Aurora
 resource "aws_security_group" "sg-aurora-rocci" {
   name   = "aurora-sg"
@@ -120,6 +129,13 @@ resource "aws_security_group" "sg-aurora-rocci" {
     to_port         = 3306
     protocol        = "tcp"
     security_groups = [aws_security_group.sg-eb-rocci.id]
+  }
+
+  ingress {
+    from_port = 3306
+    to_port = 3306
+    protocol = "tcp"
+    cidr_blocks = var.github_actions_ips
   }
 
   egress {
@@ -156,7 +172,7 @@ resource "aws_rds_cluster_instance" "aurora-db-instance" {
     engine = aws_rds_cluster.aurora-db.engine
     engine_version = aws_rds_cluster.aurora-db.engine_version
     instance_class = "db.serverless"
-    publicly_accessible = false  
+    publicly_accessible = true
 }
 
 
