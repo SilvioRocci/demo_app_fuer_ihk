@@ -11,6 +11,10 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    outputs:
+      db_host: ${{ steps.export.outputs.db_host }}
+      db_user: ${{ steps.export.outputs.db_user }}
+      db_name: ${{ steps.export.outputs.db_name }}
 
     steps:
       - name: Checkout Repository
@@ -37,12 +41,11 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: ./urlaub_ihk
 
-      - name: Export DB Outputs
+      - id: export
         run: |
-          echo "DB_HOST=$(terraform output -raw db_host)" >> $GITHUB_ENV
-          echo "DB_USER=$(terraform output -raw db_user)" >> $GITHUB_ENV
-          echo "DB_NAME=$(terraform output -raw db_name)" >> $GITHUB_ENV
-          echo "DB_PASSWORD=12345678" >> $GITHUB_ENV   # aus main.tf (kannst du auch in Secrets packen)
+          echo "db_host=$(terraform output -raw db_host)" >> $GITHUB_OUTPUT
+          echo "db_user=$(terraform output -raw db_user)" >> $GITHUB_OUTPUT
+          echo "db_name=$(terraform output -raw db_name)" >> $GITHUB_OUTPUT
         working-directory: ./urlaub_ihk
 
   build:
@@ -85,7 +88,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: terraform
 
     steps:
       - name: Checkout Repository
@@ -121,7 +124,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y mysql-client
-          mysql -h "$DB_HOST" \
-                -u "$DB_USER" \
-                -p"$DB_PASSWORD" \
-                "$DB_NAME" < urlaub_ihk/schema.sql
+          mysql -h "${{ needs.terraform.outputs.db_host }}" 
+                -u "${{ needs.terraform.outputs.db_user }}" 
+                -p"${{ secrets.DB_PASSWORD }}" 
+                "${{ needs.terraform.outputs.db_name }}" < urlaub_ihk/schema.sql
