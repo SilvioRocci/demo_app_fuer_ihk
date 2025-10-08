@@ -22,9 +22,24 @@ async function getConnection() {
   });
 }
 
-// Hilfsfunktion: undefined → null umwandeln
+// Hilfsfunktion: undefined → null
 function sanitize(value) {
   return value === undefined ? null : value;
+}
+
+// Hilfsfunktion: Datum ins Format YYYY-MM-DD umwandeln
+function normalizeDate(value) {
+  if (!value) return null;
+  // Direktes YYYY-MM-DD → passt schon
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return value;
+  }
+  // ISO-String oder Date-Objekt
+  const date = new Date(value);
+  if (!isNaN(date.getTime())) {
+    return date.toISOString().slice(0, 10); // YYYY-MM-DD
+  }
+  return null;
 }
 
 // GET alle Urlaubsanträge
@@ -49,7 +64,7 @@ app.post('/api/urlaubsantraege', async (req, res) => {
     const conn = await getConnection();
     const [result] = await conn.execute(
       "INSERT INTO urlaubsantraege (name, start, ende, grund) VALUES (?, ?, ?, ?)",
-      [sanitize(name), sanitize(start), sanitize(ende), sanitize(grund)]
+      [sanitize(name), normalizeDate(start), normalizeDate(ende), sanitize(grund)]
     );
     await conn.end();
 
