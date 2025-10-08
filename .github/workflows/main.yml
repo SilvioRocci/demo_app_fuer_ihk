@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - main
-
+    paths: 
+      - 'urlaub_ihk/*.tf'           # nur Terraform-Dateien triggern den Terraform-Job
+      - 'urlaub_ihk/schema.sql'     # optional: Schema auch überwachen
+      - '.github/workflows/main.yml' # Workflow-Änderungen triggern ebenfalls
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -28,9 +31,11 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./urlaub_ihk
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
+        working-directory: ./urlaub_ihk
 
       - name: Export DB Outputs
         run: |
@@ -38,6 +43,7 @@ jobs:
           echo "DB_USER=$(terraform output -raw db_user)" >> $GITHUB_ENV
           echo "DB_NAME=$(terraform output -raw db_name)" >> $GITHUB_ENV
           echo "DB_PASSWORD=12345678" >> $GITHUB_ENV   # aus main.tf (kannst du auch in Secrets packen)
+        working-directory: ./urlaub_ihk
 
   build:
     runs-on: ubuntu-latest

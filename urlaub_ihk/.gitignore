@@ -54,3 +54,14 @@ Thumbs.db
 *.msi
 *.deb
 *.rpm
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*.override.tf
+*.override.tf.json
+terraform.tfvars
