@@ -98,7 +98,7 @@ resource "aws_security_group" "sg-eb-rocci" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    cidr_blocks = ["147.161.251.114"]
+    cidr_blocks = ["147.161.251.114/32"]
   }
 
   egress {
