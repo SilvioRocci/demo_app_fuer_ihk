@@ -12,12 +12,6 @@ provider "aws" {
   region = "eu-central-1"
 }
 
-resource "aws_key_pair" "eb_key" {
-  key_name   = "eb-ssh-key"
-  public_key = file("C:/Users/a881472/.ssh/aws.pub")
-}
-
-
 resource "aws_vpc" "rocci" {
   cidr_block = "172.40.0.0/16"
   enable_dns_support = true
@@ -75,16 +69,6 @@ resource "aws_subnet" "private_c" {
 resource "aws_db_subnet_group" "aurora" {
   name       = "aurora-subnet-group"
   subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_b.id, aws_subnet.private_c.id]
-}
-
-# Security Group für EB
-resource "aws_security_group_rule" "eb_ssh" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  cidr_blocks       = ["147.161.250.127/32"] 
-  security_group_id = aws_security_group.sg-eb-rocci.id
 }
 
 resource "aws_security_group" "sg-eb-rocci" {
