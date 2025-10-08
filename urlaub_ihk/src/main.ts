@@ -10,10 +10,10 @@ form.addEventListener('submit', async (event) => {
 
   const name = (document.getElementById('name') as HTMLInputElement).value;
   const start = (document.getElementById('start') as HTMLInputElement).value;
-  const end = (document.getElementById('end') as HTMLInputElement).value;
+  const ende = (document.getElementById('ende') as HTMLInputElement).value;
   const grund = (document.getElementById('grund') as HTMLTextAreaElement).value;
-  const neuerUrlaub = { name, start, end, grund };
-  
+  const neuerUrlaub = { name, start, ende, grund };
+
 
   await fetch(apiUrl, {
     method: "POST",
