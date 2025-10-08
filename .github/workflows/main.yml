@@ -115,6 +115,7 @@ jobs:
           deployment_package: "app.zip"
 
       - name: Update Database Schema
+        working-directory: ./urlaub_ihk
         run: |
           sudo apt-get update
           sudo apt-get install -y mysql-client
