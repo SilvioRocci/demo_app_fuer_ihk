@@ -1,3 +1,5 @@
+name: Build & Deploy mit Terraform
+run-name: ${{ github.event.head_commit.message }}
 on:
   push:
     branches:
