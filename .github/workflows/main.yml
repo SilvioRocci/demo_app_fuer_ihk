@@ -30,7 +30,7 @@ jobs:
         working-directory: ./urlaub_ihk
     
       - name: Build Angular App
-        run: npm run build -- --configuration production --output-path=../dist/browser 
+        run: npm run build -- --configuration production --output-path=../dist 
         working-directory: ./urlaub_ihk
 
       - name: Install MySQL Client
