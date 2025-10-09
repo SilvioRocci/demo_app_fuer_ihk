@@ -58,6 +58,9 @@ app.post('/api/urlaubsantraege', async (req, res) => {
   try {
     const { name, start, end, grund } = req.body;
     console.log("📥 Request Body:", req.body);
+    console.log("➡️ start:", start, "normalized:", normalizeDate(start));
+    console.log("➡️ end:", end, "normalized:", normalizeDate(end));
+
 
     const conn = await getConnection();
     const [result] = await conn.execute(
