@@ -72,6 +72,7 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: eu-central-1
 
+          
       - name: Terraform Init
         run: terraform init
         working-directory: ./urlaub_ihk
