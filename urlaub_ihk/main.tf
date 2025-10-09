@@ -36,6 +36,7 @@ resource "aws_subnet" "public_a" {
   
 }
 
+
 #Route Table für Public Subnet
 resource "aws_route_table" "public" {
     vpc_id = aws_vpc.rocci.id
