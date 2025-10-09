@@ -34,25 +34,27 @@ function normalizeDate(value) {
 }
 
 app.get('/api/urlaubsantraege', async (req, res) => {
+  let conn;
   try {
-    const conn = await getConnection()
+    conn = await getConnection();
     const [rows] = await conn.execute(`
-    SELECT id, name, start, end, grund
-    FROM urlaubsantraege
-  `);
-  await conn.end();
+      SELECT id, name, start, end, grund
+      FROM urlaubsantraege
+    `);
 
-  const normalized = rows.map(r => ({
-  ...r,
-  start: normalizeDate(r.start),
-  end: normalizeDate(r.end)
-  }));
-  
-  res.json(normalized);
+    // Datumsfelder ins ISO-Format normalisieren
+    const normalized = rows.map(r => ({
+      ...r,
+      start: normalizeDate(r.start),
+      end: normalizeDate(r.end)
+    }));
 
+    res.json(normalized);
   } catch (err) {
     console.error("❌ Fehler beim SELECT:", err);
     res.status(500).json({ error: "DB-Select fehlgeschlagen", details: err.message });
+  } finally {
+    if (conn) await conn.end(); // Verbindung schließen
   }
 });
 
