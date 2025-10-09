@@ -27,7 +27,6 @@ jobs:
         run: ng build
         working-directory: ./urlaub_ihk
 
-        
       - name: Build Angular App
         run: npm run build -- --configuration production --output-path=../dist/browser
         working-directory: ./urlaub_ihk
