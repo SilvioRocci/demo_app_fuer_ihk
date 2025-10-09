@@ -44,7 +44,7 @@ app.get('/api/urlaubsantraege', async (req, res) => {
     const normalized = rows.map(r => ({
       ...r,
       start: normalizeDate(r.start),
-      end: normalizeDate(r.end)
+      enddatum: normalizeDate(r.enddatum)
     }));
 
     res.json(normalized);
@@ -57,13 +57,13 @@ app.get('/api/urlaubsantraege', async (req, res) => {
 // POST neuer Urlaubsantrag
 app.post('/api/urlaubsantraege', async (req, res) => {
   try {
-    const { name, start, end, grund } = req.body;
+    const { name, start, enddatum, grund } = req.body;
     console.log("📥 Request Body:", req.body);
 
     const conn = await getConnection();
     const [result] = await conn.execute(
-      "INSERT INTO urlaubsantraege (name, start, end, grund) VALUES (?, ?, ?, ?)",
-      [sanitize(name), normalizeDate(start), normalizeDate(end), sanitize(grund)]
+      "INSERT INTO urlaubsantraege (name, start, enddatum, grund) VALUES (?, ?, ?, ?)",
+      [sanitize(name), normalizeDate(start), normalizeDate(enddatum), sanitize(grund)]
     );
     await conn.end();
 

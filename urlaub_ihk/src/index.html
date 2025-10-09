@@ -111,7 +111,7 @@
       </label>
       <label>
         Enddatum:
-        <input type="date" id="end" required>
+        <input type="date" id="enddatum" required>
       </label>
       <label>
         Grund:
@@ -144,7 +144,7 @@
       const data = {
         name: document.getElementById("name").value,
         start: document.getElementById("start").value,
-        end: document.getElementById("end").value,
+        enddatum: document.getElementById("enddatum").value,
         grund: document.getElementById("grund").value,
       };
 
@@ -178,13 +178,13 @@
             entriesEl.innerHTML = "<p>Keine Einträge vorhanden.</p>";
           } else {
             let html = "<h2>Gespeicherte Anträge</h2>";
-            html += "<table><tr><th>ID</th><th>Name</th><th>Start</th><th>Ende</th><th>Grund</th><th>Aktion</th></tr>";
+            html += "<table><tr><th>ID</th><th>Name</th><th>Start</th><th>Enddatum</th><th>Grund</th><th>Aktion</th></tr>";
             data.forEach(row => {
               html += `<tr>
                 <td>${row.id}</td>
                 <td>${row.name}</td>
                 <td>${row.start}</td>
-                <td>${row.end}</td>
+                <td>${row.enddatum}</td>
                 <td>${row.grund || ""}</td>
                 <td><button class="delete-btn" onclick="deleteEntry(${row.id})">Löschen</button></td>
               </tr>`;
