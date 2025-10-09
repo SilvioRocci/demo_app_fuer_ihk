@@ -23,6 +23,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
         working-directory: ./urlaub_ihk
+        
+      - name: ng build
+        run: ng build
+        working-directory: ./urlaub_ihk
 
       - name: Clean dist folder
         run: rm -rf ./dist
