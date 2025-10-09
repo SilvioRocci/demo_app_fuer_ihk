@@ -36,14 +36,19 @@ function normalizeDate(value) {
 app.get('/api/urlaubsantraege', async (req, res) => {
   try {
     const conn = await getConnection();
-    const [rows] = await conn.execute("SELECT * FROM urlaubsantraege");
+
+    const [rows] = await conn.execute(`
+      SELECT id, name, start, enddatum AS end, grund
+      FROM urlaubsantraege
+    `);
+
     await conn.end();
 
     // Datumsfelder normalisieren
     const normalized = rows.map(r => ({
       ...r,
       start: normalizeDate(r.start),
-      enddatum: normalizeDate(r.enddatum)
+      end: normalizeDate(r.end)   
     }));
 
     res.json(normalized);
