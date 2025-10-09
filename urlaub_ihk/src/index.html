@@ -143,7 +143,7 @@
       const data = {
         name: document.getElementById("name").value,
         start: document.getElementById("start").value,
-        enddatum: document.getElementById("enddatum").value,
+        end: document.getElementById("end").value,
         grund: document.getElementById("grund").value,
       };
 
@@ -183,7 +183,7 @@
                 <td>${row.id}</td>
                 <td>${row.name}</td>
                 <td>${row.start}</td>
-                <td>${row.enddatum}</td>
+                <td>${row.end}</td>
                 <td>${row.grund || ""}</td>
                 <td><button class="delete-btn" onclick="deleteEntry(${row.id})">Löschen</button></td>
               </tr>`;
