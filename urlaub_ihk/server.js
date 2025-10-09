@@ -33,7 +33,6 @@ function normalizeDate(value) {
   return new Date(value).toISOString().split('T')[0];
 }
 
-// GET alle Urlaubsanträge
 app.get('/api/urlaubsantraege', async (req, res) => {
   try {
     const conn = await getConnection();
@@ -54,7 +53,7 @@ app.get('/api/urlaubsantraege', async (req, res) => {
   }
 });
 
-// POST neuer Urlaubsantrag
+
 app.post('/api/urlaubsantraege', async (req, res) => {
   try {
     const { name, start, enddatum, grund } = req.body;
@@ -75,7 +74,7 @@ app.post('/api/urlaubsantraege', async (req, res) => {
   }
 });
 
-// DELETE Antrag
+
 app.delete('/api/urlaubsantraege/:id', async (req, res) => {
   try {
     const { id } = req.params;
