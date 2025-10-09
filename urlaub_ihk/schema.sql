@@ -5,6 +5,6 @@ CREATE TABLE IF NOT EXISTS urlaubsantraege (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     start DATE NOT NULL,
-    end DATE NOT NULL,
+    ende DATE NOT NULL,
     grund TEXT
 );
