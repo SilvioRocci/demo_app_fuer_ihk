@@ -156,13 +156,13 @@
 
         const result = await res.json();
         if (res.ok) {
-          statusEl.textContent = "✅ Antrag erfolgreich gespeichert!";
+          statusEl.textContent = "Antrag erfolgreich gespeichert!";
           form.reset();
         } else {
-          statusEl.textContent = "❌ Fehler: " + result.error;
+          statusEl.textContent = "Fehler: " + result.error;
         }
       } catch (err) {
-        statusEl.textContent = "❌ Serverfehler: " + err.message;
+        statusEl.textContent = "Serverfehler: " + err.message;
       }
     });
 
@@ -192,10 +192,10 @@
             entriesEl.innerHTML = html;
           }
         } else {
-          entriesEl.innerHTML = "<p>❌ Fehler beim Laden</p>";
+          entriesEl.innerHTML = "<p>Fehler beim Laden</p>";
         }
       } catch (err) {
-        entriesEl.innerHTML = "<p>❌ Serverfehler: " + err.message + "</p>";
+        entriesEl.innerHTML = "<p>Serverfehler: " + err.message + "</p>";
       }
     }
 
@@ -209,10 +209,10 @@
         if (res.ok) {
           await loadEntries();
         } else {
-          alert("❌ Fehler beim Löschen");
+          alert("Fehler beim Löschen");
         }
       } catch (err) {
-        alert("❌ Serverfehler: " + err.message);
+        alert("Serverfehler: " + err.message);
       }
     }
 
