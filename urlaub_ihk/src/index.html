@@ -177,7 +177,7 @@
             entriesEl.innerHTML = "<p>Keine Einträge vorhanden.</p>";
           } else {
             let html = "<h2>Gespeicherte Anträge</h2>";
-            html += "<table><tr><th>ID</th><th>Name</th><th>Start</th><th>Enddatum</th><th>Grund</th><th>Aktion</th></tr>";
+            html += "<table><tr><th>ID</th><th>Name</th><th>Start</th><th>Ende</th><th>Grund</th><th>Aktion</th></tr>";
             data.forEach(row => {
               html += `<tr>
                 <td>${row.id}</td>
