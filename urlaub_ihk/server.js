@@ -51,7 +51,7 @@ app.get('/api/urlaubsantraege', async (req, res) => {
 
     res.json(normalized);
   } catch (err) {
-    console.error("❌ Fehler beim SELECT:", err);
+    console.error("Fehler beim SELECT:", err);
     res.status(500).json({ error: "DB-Select fehlgeschlagen", details: err.message });
   } finally {
     if (conn) await conn.end(); // Verbindung schließen
