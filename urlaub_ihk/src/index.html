@@ -111,7 +111,7 @@
       </label>
       <label>
         Enddatum:
-        <input type="date" id="ende" required>
+        <input type="date" id="end" required>
       </label>
       <label>
         Grund:
@@ -144,7 +144,7 @@
       const data = {
         name: document.getElementById("name").value,
         start: document.getElementById("start").value,
-        ende: document.getElementById("ende").value,
+        end: document.getElementById("end").value,
         grund: document.getElementById("grund").value,
       };
 
@@ -184,7 +184,7 @@
                 <td>${row.id}</td>
                 <td>${row.name}</td>
                 <td>${row.start}</td>
-                <td>${row.ende}</td>
+                <td>${row.end}</td>
                 <td>${row.grund || ""}</td>
                 <td><button class="delete-btn" onclick="deleteEntry(${row.id})">Löschen</button></td>
               </tr>`;
