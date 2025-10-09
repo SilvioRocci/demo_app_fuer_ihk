@@ -62,9 +62,9 @@ app.get('/api/urlaubsantraege', async (req, res) => {
 app.post('/api/urlaubsantraege', async (req, res) => {
   try {
     const { name, start, ende, grund } = req.body;
-    console.log("📥 Request Body:", req.body);
-    console.log("➡️ start:", start, "normalized:", normalizeDate(start));
-    console.log("➡️ ende:", ende, "normalized:", normalizeDate(ende));
+    console.log("Request Body:", req.body);
+    console.log("start:", start, "normalized:", normalizeDate(start));
+    console.log("ende:", ende, "normalized:", normalizeDate(ende));
 
 
     const conn = await getConnection();
@@ -74,10 +74,10 @@ app.post('/api/urlaubsantraege', async (req, res) => {
     );
     await conn.end();
 
-    console.log("✅ Insert erfolgreich:", result);
+    console.log("Insert erfolgreich:", result);
     res.status(201).json({ message: "Urlaub gespeichert", id: result.insertId });
   } catch (err) {
-    console.error("❌ Fehler beim INSERT:", err);
+    console.error("Fehler beim INSERT:", err);
     res.status(500).json({ error: "DB-Insert fehlgeschlagen", details: err.message });
   }
 });
@@ -90,10 +90,10 @@ app.delete('/api/urlaubsantraege/:id', async (req, res) => {
     const [result] = await conn.execute("DELETE FROM urlaubsantraege WHERE id = ?", [id]);
     await conn.end();
 
-    console.log("🗑️ Delete:", result);
+    console.log("Delete:", result);
     res.json({ message: "Urlaub gelöscht" });
   } catch (err) {
-    console.error("❌ Fehler beim DELETE:", err);
+    console.error("Fehler beim DELETE:", err);
     res.status(500).json({ error: "DB-Delete fehlgeschlagen", details: err.message });
   }
 });
@@ -104,6 +104,6 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server läuft auf Port ${PORT}`);
+  console.log(`Server läuft auf Port ${PORT}`);
   console.log(`DB_HOST=${DB_HOST}, DB_USER=${DB_USER}, DB_NAME=${DB_NAME}`);
 });

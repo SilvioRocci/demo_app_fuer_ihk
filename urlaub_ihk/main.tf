@@ -116,7 +116,6 @@ resource "aws_security_group" "sg-eb-rocci" {
     "20.205.243.128/25",
     "20.207.73.0/25",
     "20.233.54.0/23",
-    # … weitere aus der GitHub‑Liste
   ]
 }
 # Security Group für Aurora
