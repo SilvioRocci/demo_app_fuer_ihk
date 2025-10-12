@@ -45,6 +45,7 @@ jobs:
           cp -r urlaub_ihk/.platform dist-to-deploy/   
           cd dist-to-deploy && zip -r ../app.zip .
 
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
