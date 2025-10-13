@@ -50,3 +50,4 @@ async function ladeUrlaube() {
 
 // Klick auf „Anträge laden“-Button
 loadBtn.addEventListener("click", ladeUrlaube);
+
