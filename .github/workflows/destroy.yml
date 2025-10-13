@@ -1,0 +1,37 @@
+name: Destroy Infrastructure
+run-name: ${{ github.event.head_commit.message }}
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  destroy:
+    if: contains(github.event.head_commit.message, 'destroy')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.5
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: eu-central-1
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./urlaub_ihk
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
+        working-directory: ./urlaub_ihk

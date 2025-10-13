@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS urlaubsantraege (
     name VARCHAR(100) NOT NULL,
     start DATE NOT NULL,
     ende DATE NOT NULL,
-    grund TEXT
+    kommentar TEXT
 );

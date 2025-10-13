@@ -38,7 +38,7 @@ app.get('/api/urlaubsantraege', async (req, res) => {
   try {
     conn = await getConnection();
     const [rows] = await conn.execute(`
-      SELECT id, name, start, ende, grund
+      SELECT id, name, start, ende, kommentar
       FROM urlaubsantraege
     `);
 
@@ -61,7 +61,7 @@ app.get('/api/urlaubsantraege', async (req, res) => {
 
 app.post('/api/urlaubsantraege', async (req, res) => {
   try {
-    const { name, start, ende, grund } = req.body;
+    const { name, start, ende, kommentar } = req.body;
     console.log("Request Body:", req.body);
     console.log("start:", start, "normalized:", normalizeDate(start));
     console.log("ende:", ende, "normalized:", normalizeDate(ende));
@@ -69,8 +69,8 @@ app.post('/api/urlaubsantraege', async (req, res) => {
 
     const conn = await getConnection();
     const [result] = await conn.execute(
-      "INSERT INTO urlaubsantraege (name, start, ende, grund) VALUES (?, ?, ?, ?)",
-      [sanitize(name), normalizeDate(start), normalizeDate(ende), sanitize(grund)]
+      "INSERT INTO urlaubsantraege (name, start, ende, kommentar) VALUES (?, ?, ?, ?)",
+      [sanitize(name), normalizeDate(start), normalizeDate(ende), sanitize(kommentar)]
     );
     await conn.end();
 

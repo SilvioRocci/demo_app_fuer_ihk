@@ -11,8 +11,8 @@ form.addEventListener('submit', async (event) => {
   const name = (document.getElementById('name') as HTMLInputElement).value;
   const start = (document.getElementById('start') as HTMLInputElement).value;
   const ende = (document.getElementById('ende') as HTMLInputElement).value;
-  const grund = (document.getElementById('grund') as HTMLTextAreaElement).value;
-  const neuerUrlaub = { name, start, ende, grund };
+  const kommentar = (document.getElementById('kommentar') as HTMLTextAreaElement).value;
+  const neuerUrlaub = { name, start, ende, kommentar };
 
 
   await fetch(apiUrl, {
@@ -32,7 +32,7 @@ async function ladeUrlaube() {
   urlaubListeEl.innerHTML = "";
   urlaube.forEach((urlaub: any) => {
     const li = document.createElement("li");
-    li.textContent = `${urlaub.name} | ${urlaub.start} - ${urlaub.ende} | ${urlaub.grund}`;
+    li.textContent = `${urlaub.name} | ${urlaub.start} - ${urlaub.ende} | ${urlaub.kommentar}`;
 
     // Löschen-Button
     const deleteBtn = document.createElement("button");

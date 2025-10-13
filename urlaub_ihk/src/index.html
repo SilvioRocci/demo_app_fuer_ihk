@@ -114,8 +114,8 @@
         <input type="date" id="ende" required>
       </label>
       <label>
-        Grund:
-        <textarea id="grund"></textarea>
+        Kommentar:
+        <textarea id="kommentar"></textarea>
       </label>
 
       <div class="button-row">
@@ -144,7 +144,7 @@
         name: document.getElementById("name").value,
         start: document.getElementById("start").value,
         ende: document.getElementById("ende").value,
-        grund: document.getElementById("grund").value,
+        kommentar: document.getElementById("kommentar").value,
       };
 
       try {
@@ -177,14 +177,14 @@
             entriesEl.innerHTML = "<p>Keine Einträge vorhanden.</p>";
           } else {
             let html = "<h2>Gespeicherte Anträge</h2>";
-            html += "<table><tr><th>ID</th><th>Name</th><th>Start</th><th>Ende</th><th>Grund</th><th>Aktion</th></tr>";
+            html += "<table><tr><th>ID</th><th>Name</th><th>Start</th><th>Ende</th><th>Kommentar</th><th>Aktion</th></tr>";
             data.forEach(row => {
               html += `<tr>
                 <td>${row.id}</td>
                 <td>${row.name}</td>
                 <td>${row.start}</td>
                 <td>${row.ende}</td>
-                <td>${row.grund || ""}</td>
+                <td>${row.kommentar || ""}</td>
                 <td><button class="delete-btn" onclick="deleteEntry(${row.id})">Löschen</button></td>
               </tr>`;
             });
