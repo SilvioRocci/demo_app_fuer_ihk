@@ -145,6 +145,7 @@ resource "aws_security_group" "sg-aurora-rocci" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
 #Aurora DB + Table
 resource "aws_rds_cluster" "aurora-db" {
     cluster_identifier = "rocci-ihk-cluster"
