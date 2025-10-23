@@ -129,5 +129,4 @@ jobs:
           region: eu-central-1
           version_label: ${{ github.sha }}
           deployment_package: "app.zip"
-
           
