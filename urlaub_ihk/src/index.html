@@ -140,7 +140,15 @@
     // Antrag absenden
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      const startDate = new Date(document.getElementById("start").value);
+      const endDate = new Date(document.getElementById("ende").value);
 
+    // Validierung: Startdatum < Enddatum
+      if (startDate > endDate) {
+        statusEl.textContent = "Fehler: Das Enddatum muss nach dem Startdatum liegen.";
+        statusEl.style.color = "red";
+        return;
+      }
       const data = {
         name: document.getElementById("name").value,
         start: document.getElementById("start").value,

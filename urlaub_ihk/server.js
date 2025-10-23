@@ -65,8 +65,10 @@ app.post('/api/urlaubsantraege', async (req, res) => {
     console.log("Request Body:", req.body);
     console.log("start:", start, "normalized:", normalizeDate(start));
     console.log("ende:", ende, "normalized:", normalizeDate(ende));
-
-
+    // Start-/Enddatum validieren
+    if (new Date(start) > new Date(ende)) {
+      return res.status(400).json({ error: "Das Enddatum muss nach dem Startdatum liegen." });
+    }
     const conn = await getConnection();
     const [result] = await conn.execute(
       "INSERT INTO urlaubsantraege (name, start, ende, kommentar) VALUES (?, ?, ?, ?)",
