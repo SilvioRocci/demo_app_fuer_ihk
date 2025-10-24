@@ -35,3 +35,5 @@ jobs:
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
         working-directory: ./urlaub_ihk
+
+        
